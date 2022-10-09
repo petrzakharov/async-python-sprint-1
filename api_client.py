@@ -17,11 +17,11 @@ class YandexWeatherAPI:
         """Base request method"""
         try:
             with urlopen(url) as req:
-                resp = req.read().decode("utf-8")
+                resp = req.read().decode('utf-8')
                 resp = json.loads(resp)
             if req.status != 200:
                 raise Exception(
-                    "Error during execute request. {}: {}".format(
+                    'Error during execute request. {}: {}'.format(
                         resp.status, resp.reason
                     )
                 )
@@ -35,7 +35,7 @@ class YandexWeatherAPI:
         try:
             return CITIES[city_name]
         except KeyError:
-            raise Exception("Please check that city {} exists".format(city_name))
+            raise Exception('Please check that city {} exists'.format(city_name))
 
     def get_forecasting(self, city_name: str):
         """

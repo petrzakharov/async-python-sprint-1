@@ -1,27 +1,30 @@
-# import logging
-# import threading
-# import subprocess
-# import multiprocessing
+import logging
+import multiprocessing
 
-from api_client import YandexWeatherAPI
-from tasks import (
-    DataFetchingTask,
-    DataCalculationTask,
-    DataAggregationTask,
-    DataAnalyzingTask,
-)
-from utils import CITIES
+from tasks import DataAggregationTask, DataAnalyzingTask, DataCalculationTask
+
+logger = logging.getLogger()
 
 
 def forecast_weather():
-    """
-    Анализ погодных условий по городам
-    """
-    # city_name = "MOSCOW"
-    # ywAPI = YandexWeatherAPI()
-    # resp = ywAPI.get_forecasting(city_name)
-    pass
+    logging.basicConfig(
+        filename='application-log.log',
+        filemode='w',
+        format='%(name)s - %(levelname)s - %(message)s',
+        level=logging.INFO
+    )
+    try:
+        queue = multiprocessing.Queue()
+        process_producer = DataCalculationTask(queue)
+        process_consumer = DataAggregationTask(queue)
+        process_producer.start()
+        process_producer.join()
+        process_consumer.start()
+        process_consumer.join()
+        DataAnalyzingTask().analyze()
+    except Exception as exception:
+        logger.error(exception)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     forecast_weather()
