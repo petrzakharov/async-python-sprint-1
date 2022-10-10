@@ -1,3 +1,14 @@
+import logging
+
+logger = logging.getLogger()
+
+logging.basicConfig(
+    filename='application-log.log',
+    filemode='w',
+    format='%(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+
 CITIES = {
     "MOSCOW": "https://code.s3.yandex.net/async-module/moscow-response.json",
     "PARIS": "https://code.s3.yandex.net/async-module/paris-response.json",
